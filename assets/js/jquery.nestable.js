@@ -384,7 +384,7 @@
                     list = prev.find(opt.listNodeName).last();
                     // check if depth limit has reached
                     depth = this.placeEl.parents(opt.listNodeName).length;
-                    if (depth + this.dragDepth <= opt.maxDepth) {
+                    if ((depth + this.dragDepth <= opt.maxDepth)) {
                         // create new sub-level if one doesn't exist
                         if (!list.length) {
                             list = $('<' + opt.listNodeName + '/>').addClass(opt.listClass);
@@ -399,6 +399,10 @@
                     }
                 }
                 // decrease horizontal level
+                depth = this.placeEl.parents(opt.listNodeName).length;
+                if(depth == 2){
+                    return;
+                }
                 if (mouse.distX < 0) {
                     // we can't decrease a level if an item preceeds the current one
                     next = this.placeEl.next(opt.itemNodeName);
@@ -449,6 +453,11 @@
                 if (depth > opt.maxDepth) {
                     return;
                 }
+
+                if(depth==1){
+                    return;
+                }
+                
                 var before = e.pageY < (this.pointEl.offset().top + this.pointEl.height() / 2);
                     parent = this.placeEl.parent();
                 // if empty create new list to replace empty placeholder
@@ -458,7 +467,7 @@
                     this.pointEl.replaceWith(list);
                 }
                 else if (before) {
-                    this.pointEl.before(this.placeEl);
+                        this.pointEl.before(this.placeEl);
                 }
                 else {
                     this.pointEl.after(this.placeEl);
