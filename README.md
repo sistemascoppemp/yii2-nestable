@@ -12,13 +12,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-$ php composer.phar require slatiusa/yii2-nestable "dev-master"
+$ php composer.phar require sistemascoppemp/yii2-nestable "dev-master"
 ```
 
 or add
 
 ```
-"slatiusa/yii2-nestable": "dev-master"
+"sistemascoppemp/yii2-nestable": "dev-master"
 ```
 
 to the ```require``` section of your `composer.json` file.
@@ -29,14 +29,14 @@ Make sure you've attached the NestedSetsBehavior (creocoder/yii2-nested-sets) co
 Then add the node move handler to you controller by attaching the supplied action;
 
 ```
-use slatiusa\nestable\Nestable;
+use sistemascoppemp\nestable\Nestable;
 
 class yourClass extends Controller
 {
     public function actions() {
         return [
             'nodeMove' => [
-                'class' => 'slatiusa\nestable\NodeMoveAction',
+                'class' => 'sistemascoppemp\nestable\NodeMoveAction',
                 'modelName' => TreeModel::className(),
             ],
         ];
