@@ -140,8 +140,7 @@ class Nestable extends \kartik\base\Widget
             $options = ArrayHelper::merge($this->itemOptions, $options);
             $dataId  = ArrayHelper::getValue($item, 'id', $dataid++);
             $options = ArrayHelper::merge($options, ['data-id' => $dataId]);
-
-            $contentOptions = ArrayHelper::getValue($item, 'contentOptions', ['class' => 'dd3-content', 'data-id' => $dataId]);
+            $contentOptions = ArrayHelper::getValue($item, 'contentOptions', ['class' => 'dd3-content', 'data-id' => $dataId, 'ind_finalizado' => isset($item['ind_finalizado']) ? $item['ind_finalizado'] : '']);
 			$content = $this->handleLabel;
 			$content .= Html::tag('div', ArrayHelper::getValue($item, 'content', ''), $contentOptions);
 
@@ -189,6 +188,7 @@ class Nestable extends \kartik\base\Widget
             $items[] = [
                 'id'       => $model->getPrimaryKey(),
                 'content'  => (is_callable($name) ? call_user_func($name, $model) : $model->{$name}),
+		'ind_finalizado' => isset($model->ind_finalizado) ? $model->ind_finalizado == 1 ? 'true' : 'false' : 'false',
                 'children' => $this->prepareItems($model->children(1)),
             ];
         }
