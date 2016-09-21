@@ -131,7 +131,7 @@ class Nestable extends \kartik\base\Widget
 	 *
 	 * @return string
 	 */
-	protected function renderItems($_items = NULL) {
+	protected function renderItems($_items = NULL, $isRaiz = 'true') {
 		$_items = is_null($_items) ? $this->items : $_items;
 		$items = '';
         $dataid = 0;
@@ -140,15 +140,19 @@ class Nestable extends \kartik\base\Widget
             $options = ArrayHelper::merge($this->itemOptions, $options);
             $dataId  = ArrayHelper::getValue($item, 'id', $dataid++);
             $options = ArrayHelper::merge($options, ['data-id' => $dataId]);
-            $contentOptions = ArrayHelper::getValue($item, 'contentOptions', ['class' => 'dd3-content', 'data-id' => $dataId, 'ind_finalizado' => isset($item['ind_finalizado']) ? $item['ind_finalizado'] : '']);
-			$content = $this->handleLabel;
+            $contentOptions = ArrayHelper::getValue($item, 'contentOptions', ['class' => 'dd3-content', 'is_raiz' => $isRaiz, 'data-id' => $dataId, 'ind_finalizado' => isset($item['ind_finalizado']) ? $item['ind_finalizado'] : '']);
+			if($isRaiz == 'true') {
+				$content = '<div class="dd-handle dd3-handle" is_raiz="true">&nbsp;</div>';
+			} else {
+				$content = '<div class="dd-handle dd3-handle" is_raiz="false">&nbsp;</div>';
+			}
 			$content .= Html::tag('div', ArrayHelper::getValue($item, 'content', ''), $contentOptions);
 
 			$children = ArrayHelper::getValue($item, 'children', []);
 			if (!empty($children)) {
 					// recursive rendering children items
-				$content .= Html::beginTag('ol', ['class' => 'dd-list']);
-				$content .= $this->renderItems($children);
+				$content .= Html::beginTag('ol', ['class' => 'dd-list', 'is_raiz' => 'true']);
+				$content .= $this->renderItems($children, 'false');
 				$content .= Html::endTag('ol');
 			}
 
@@ -188,7 +192,7 @@ class Nestable extends \kartik\base\Widget
             $items[] = [
                 'id'       => $model->getPrimaryKey(),
                 'content'  => (is_callable($name) ? call_user_func($name, $model) : $model->{$name}),
-		'ind_finalizado' => isset($model->ind_finalizado) ? $model->ind_finalizado == 1 ? 'true' : 'false' : 'false',
+				'ind_finalizado' => isset($model->ind_finalizado) ? $model->ind_finalizado == 1 ? 'true' : 'false' : 'false',
                 'children' => $this->prepareItems($model->children(1)),
             ];
         }
